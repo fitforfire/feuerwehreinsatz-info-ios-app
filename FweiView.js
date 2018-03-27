@@ -22,6 +22,10 @@ const jsCode = `
           $('#navAppConfig').click(function() {
             nativeAppRemote.openConfig();
           });
+          if ($('#navAppConfig').length === 0) {
+            alert('FWEI unter dieser URL nicht gefunden');
+            nativeAppRemote.openConfig();
+          }
         })();
     `;
 
