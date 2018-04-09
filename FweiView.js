@@ -53,7 +53,7 @@ export default class Options extends Component<Props> {
         const {baseURL} = this.props;
         return (<View style={{flex: 1}}>
             <WebView
-                source={{uri: 'https://' + baseURL}}
+                source={{uri: (baseURL === 'about:blank' ? '' : 'https://') + baseURL}}
                 onShouldStartLoadWithRequest={(navState) => this.onShouldStartLoadWithRequest(navState)}
                 style={{flex: 1}}
                 injectedJavaScript={jsCode}

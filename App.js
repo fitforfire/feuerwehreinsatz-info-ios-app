@@ -4,7 +4,7 @@ import FweiView from './FweiView';
 import Options from './Options';
 import Popup from './Popup';
 
-import {defaultBaseURL} from './config';
+import config from './config';
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -13,9 +13,9 @@ export default class App extends Component<Props> {
         this.state = {popup: false, options: false, baseURL: 'about:blank'};
     }
     componentDidMount() {
-        AsyncStorage.getItem('FWEI.baseURL').then((loadedBaseUrl) => {
+        AsyncStorage.getItem('FWEI.baseURL').then((loadedBaseURL) => {
             this.setState({
-                baseURL: loadedBaseUrl || defaultBaseURL
+                baseURL: loadedBaseURL || config.defaultBaseURL
             });
         }).catch(() => {
             this.setState({
@@ -24,7 +24,8 @@ export default class App extends Component<Props> {
         });
     }
     render() {
-        const {options, popup, baseURL} = this.state;
+        const {options, popup} = this.state;
+        const baseURL = this.state.baseURL || 'about:blank';
         return (
             <View style={{flex: 1, marginTop: 20}}>
                 {baseURL && <View style={{flex: 1}}>
