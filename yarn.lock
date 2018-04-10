@@ -4296,6 +4296,10 @@ react-native-safe-area-view@^0.7.0:
   dependencies:
     prop-types "^15.6.0"
 
+react-native-webkit-localstorage-reader:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-webkit-localstorage-reader/-/react-native-webkit-localstorage-reader-2.0.4.tgz#fb4855c700942690e54136ec47a14d71f43edfc0"
+
 react-navigation@^1.5.8:
   version "1.5.8"
   resolved "https://registry.yarnpkg.com/react-navigation/-/react-navigation-1.5.8.tgz#f04bec1a39af8cfcf651337d351e8d0a144f1b6d"

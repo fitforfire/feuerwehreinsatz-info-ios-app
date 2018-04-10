@@ -6,6 +6,9 @@ import Popup from './Popup';
 
 import config from './config';
 
+const WebkitLocalStorageReader = require('NativeModules').WebkitLocalStorageReader;
+WebkitLocalStorageReader.get().then(data => console.log("sr", data));
+
 type Props = {};
 export default class App extends Component<Props> {
     constructor(props) {
@@ -19,7 +22,7 @@ export default class App extends Component<Props> {
             });
         }).catch(() => {
             this.setState({
-                baseURL: defaultBaseURL
+                baseURL: config.defaultBaseURL
             });
         });
     }
