@@ -7,6 +7,9 @@ import CookieManager from 'react-native-cookies';
 
 import config from './config';
 
+const WebkitLocalStorageReader = require('NativeModules').WebkitLocalStorageReader;
+WebkitLocalStorageReader.get().then(data => console.log("sr", data));
+
 function setPersistentSession(domain) {
     if (!domain) return Promise.resolve();
     return AsyncStorage.getItem('FWEI.persistentSession').then((persistentSession) => {
