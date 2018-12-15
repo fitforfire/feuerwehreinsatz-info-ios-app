@@ -1,34 +1,91 @@
 import React, { Component } from 'react';
-import {View, Text, WebView, Button, AsyncStorage, TextInput, Picker} from 'react-native';
+import {View, Text, WebView, Button, AsyncStorage, TextInput, Picker, Switch, StyleSheet} from 'react-native';
 
 import config from './config';
+const {defaultServer} = config;
 
 type Props = {};
 export default class Options extends Component<Props> {
     constructor(props) {
         super(props);
-        this.state = {unsavedServer: props.baseURL}
+        const customServer = !defaultServer.find((server) => server.url === props.baseURL);
+        this.state = {unsavedServer: props.baseURL, customServer}
     }
     save({baseURL}) {
-        return AsyncStorage.setItem('FWEI.baseURL', baseURL);
-        this.props.onClose();
+        const stored = AsyncStorage.setItem('FWEI.baseURL', baseURL);
+        this.props.onSave(baseURL);
+        return stored;
     }
     render() {
-       const {defaultServer} = config;
         const {onClose, baseURL} = this.props;
-        const {unsavedServer} = this.state;
+        const {unsavedServer, customServer} = this.state;
         return (<View>
-            <Text>Optionen</Text>
-            <Picker
-                selectedValue={unsavedServer}
-                onValueChange={(itemValue, itemIndex) => this.setState({unsavedServer: itemValue})}>
-                {defaultServer.map((server) => <Picker.Item label={server.caption} value={server.url} />)}
-            </Picker>
+            <Text style={styles.header}>Options</Text>
 
-            <TextInput style={{height: 40}} placeholder="Server" value={baseURL} onChangeText={(update) => this.setState({unsavedServer: update})} />
+            <Text style={styles.subheader}>Serverauswahl:</Text>
+            {customServer || <Picker style={styles.picker}
+                                     selectedValue={unsavedServer}
+                                     onValueChange={(itemValue, itemIndex) => this.setState({unsavedServer: itemValue})}>
+                {defaultServer.map((server) => <Picker.Item label={server.caption} key={server.caption} value={server.url}/>)}
+            </Picker>
+            }
+            <View style={styles.customServer}>
+                <View style={styles.toggleView}>
+                    <Text style={styles.toggleText}>Eigener Server</Text>
+                    <View>
+                        <Switch
+                            style={styles.toggleSwitch}
+                            disabled={false}
+                            value={customServer}
+                            onValueChange={(value) => this.setState({customServer: value})}
+                        />
+                    </View>
+                </View>
+                {customServer && (<TextInput
+                    style={{height: 40}}
+                    autoCapitalize = 'none'
+                    placeholder="Server"
+                    clearButtonMode="always"
+                    value={unsavedServer}
+                    onChangeText={(update) => this.setState({unsavedServer: update.toLowerCase()})}
+                />)}
+            </View>
 
             <Button flex title="Speichern" onPress={() => this.save({baseURL: unsavedServer})} />
-            <Button flex title="Zurück zu Feuerwehreinsatz.info" onPress={() => onClose()} />
+            <Button flex title={"Zurück zu " + baseURL} onPress={() => onClose()} />
         </View>);
     }
 }
+
+const styles = StyleSheet.create({
+    header: {
+        color: 'white',
+        backgroundColor: 'black',
+        fontWeight: 'bold',
+        fontSize: 30,
+        padding: 5
+    },
+    subheader: {
+        fontSize: 24,
+        padding: 5
+    },
+    picker: {
+        height: 200
+    },
+    toggleText: {
+        height: 24,
+        fontSize: 22
+    },
+    toggleSwitch: {
+        height: 24
+    },
+    customServer: {
+        padding: 5,
+        paddingTop: 30,
+        paddingBottom: 30
+    },
+    toggleView: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    }
+});

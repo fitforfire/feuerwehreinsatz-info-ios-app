@@ -3,11 +3,31 @@ import {View, Text, WebView, Button, AsyncStorage, TextInput} from 'react-native
 import FweiView from './FweiView';
 import Options from './Options';
 import Popup from './Popup';
+import CookieManager from 'react-native-cookies';
 
 import config from './config';
 
-const WebkitLocalStorageReader = require('NativeModules').WebkitLocalStorageReader;
-WebkitLocalStorageReader.get().then(data => console.log("sr", data));
+function setPersistentSession(domain) {
+    if (!domain) return Promise.resolve();
+    return AsyncStorage.getItem('FWEI.persistentSession').then((persistentSession) => {
+        if (persistentSession) {
+            return CookieManager.set({
+                name: 'persistentSession',
+                value: persistentSession,
+                domain: domain,
+                origin: domain,
+                path: '/',
+                version: '1',
+                expiration: '2030-01-01T12:30:00.00-05:00'
+            }).then((res) => {
+                console.log('CookieManager.set =>', persistentSession);
+            });
+        } else {
+            console.log("no persistensSession");
+        }
+
+    }).catch(() => {});
+}
 
 type Props = {};
 export default class App extends Component<Props> {
@@ -17,12 +37,18 @@ export default class App extends Component<Props> {
     }
     componentDidMount() {
         AsyncStorage.getItem('FWEI.baseURL').then((loadedBaseURL) => {
-            this.setState({
-                baseURL: loadedBaseURL || config.defaultBaseURL
+            const baseURL = loadedBaseURL || config.defaultBaseURL;
+            setPersistentSession(baseURL).then(() => {
+                this.setState({
+                    baseURL
+                });
             });
+
         }).catch(() => {
-            this.setState({
-                baseURL: config.defaultBaseURL
+            setPersistentSession(config.defaultBaseURL).then(() => {
+                this.setState({
+                    baseURL: config.defaultBaseURL
+                });
             });
         });
     }
@@ -42,7 +68,11 @@ export default class App extends Component<Props> {
                     </View>
                 }
                 {options && <View style={{flex: 1000}}>
-                    <Options baseURL={baseURL} onClose={() => this.setState({options: false})}></Options>
+                    <Options
+                        baseURL={baseURL}
+                        onClose={() => this.setState({options: false})}
+                        onSave={(baseURL) => this.setState({options: false, baseURL})}>
+                    </Options>
                 </View>
                 }
             </View>
