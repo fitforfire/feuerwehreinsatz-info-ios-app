@@ -4,11 +4,22 @@ import FweiView from './FweiView';
 import Options from './Options';
 import Popup from './Popup';
 import CookieManager from 'react-native-cookies';
+//const WebkitLocalStorageReader = require('NativeModules').WebkitLocalStorageReader;
+const WebkitLocalStorageReader = {
+    get: () => {
+        return new Promise((resolve) => {
+            return resolve({
+                server: 'fwei.mobi',
+                userConfig: '{map:{tl:osm}}',
+                code: 'user'
+            });
+        });
+    }
+};
+
+
 
 import config from './config';
-
-const WebkitLocalStorageReader = require('NativeModules').WebkitLocalStorageReader;
-WebkitLocalStorageReader.get().then(data => console.log("sr", data));
 
 function setPersistentSession(domain) {
     if (!domain) return Promise.resolve();
@@ -37,6 +48,23 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {popup: false, options: false, baseURL: 'about:blank'};
+        AsyncStorage.getItem('FWEI.migrated').then((migrated) => {
+            migrated === "true" || WebkitLocalStorageReader.get().then(data => {
+                if (data && data.server) {
+                    AsyncStorage.setItem('FWEI.baseURL', data.server);
+                    AsyncStorage.setItem('FWEI.migrated', "true");
+                    this.setState({
+                        baseURL: data.server,
+                        legacyData: {
+                            logintoken: data.code,
+                            userConfig: data.userConfig
+                        }
+                    });
+                }
+            });
+        }).catch(() => {
+            alert("catch");
+        });
     }
     componentDidMount() {
         AsyncStorage.getItem('FWEI.baseURL').then((loadedBaseURL) => {
@@ -56,12 +84,13 @@ export default class App extends Component<Props> {
         });
     }
     render() {
-        const {options, popup} = this.state;
+        const {options, popup, legacyData} = this.state;
         const baseURL = this.state.baseURL || 'about:blank';
         return (
             <View style={{flex: 1, marginTop: 20}}>
                 {baseURL && <View style={{flex: 1}}>
                     <FweiView baseURL={baseURL}
+                              legacyData={legacyData}
                               onOpenOptions={() => this.setState({options: true})}
                               onOpenPopup={(url) => this.setState({popup: url})}>
                     </FweiView>
