@@ -7,13 +7,13 @@ export default class Options extends Component<Props> {
         super(props);
     }
     render() {
-        const {onClose, url} = this.props;
+        const {onClose, url, baseURL} = this.props;
         return (<View style={{flex: 1}}>
             <WebView
                 source={{uri: url}}
                 style={{flex: 1}}
             />
-            <Button flex title="Zurück zu Feuerwehreinsatz.info" onPress={() => onClose()} />
+            <Button flex title={"Zurück zu " + baseURL} onPress={() => onClose()} />
         </View>);
     }
 }

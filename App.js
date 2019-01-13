@@ -4,7 +4,8 @@ import FweiView from './FweiView';
 import Options from './Options';
 import Popup from './Popup';
 import CookieManager from 'react-native-cookies';
-//const WebkitLocalStorageReader = require('NativeModules').WebkitLocalStorageReader;
+const WebkitLocalStorageReader = require('NativeModules').WebkitLocalStorageReader;
+/*
 const WebkitLocalStorageReader = {
     get: () => {
         return new Promise((resolve) => {
@@ -16,8 +17,8 @@ const WebkitLocalStorageReader = {
         });
     }
 };
-
-
+*/
+const isMigrated = "true";
 
 import config from './config';
 
@@ -48,11 +49,14 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {popup: false, options: false, baseURL: 'about:blank'};
+
+    }
+    componentDidMount() {
         AsyncStorage.getItem('FWEI.migrated').then((migrated) => {
-            migrated === "true" || WebkitLocalStorageReader.get().then(data => {
+            migrated === isMigrated || WebkitLocalStorageReader.get().then(data => {
                 if (data && data.server) {
                     AsyncStorage.setItem('FWEI.baseURL', data.server);
-                    AsyncStorage.setItem('FWEI.migrated', "true");
+                    AsyncStorage.setItem('FWEI.migrated', isMigrated);
                     this.setState({
                         baseURL: data.server,
                         legacyData: {
@@ -62,23 +66,22 @@ export default class App extends Component<Props> {
                     });
                 }
             });
-        }).catch(() => {
-            alert("catch");
-        });
-    }
-    componentDidMount() {
-        AsyncStorage.getItem('FWEI.baseURL').then((loadedBaseURL) => {
-            const baseURL = loadedBaseURL || config.defaultBaseURL;
-            setPersistentSession(baseURL).then(() => {
-                this.setState({
-                    baseURL
+        }).catch((e) => {
+            alert("migration failed: " + e.message);
+        }).then(() => {
+            AsyncStorage.getItem('FWEI.baseURL').then((loadedBaseURL) => {
+                const baseURL = loadedBaseURL || config.defaultBaseURL;
+                setPersistentSession(baseURL).then(() => {
+                    this.setState({
+                        baseURL
+                    });
                 });
-            });
 
-        }).catch(() => {
-            setPersistentSession(config.defaultBaseURL).then(() => {
-                this.setState({
-                    baseURL: config.defaultBaseURL
+            }).catch(() => {
+                setPersistentSession(config.defaultBaseURL).then(() => {
+                    this.setState({
+                        baseURL: config.defaultBaseURL
+                    });
                 });
             });
         });
@@ -96,7 +99,11 @@ export default class App extends Component<Props> {
                     </FweiView>
                 </View>}
                 {popup && <View style={{flex: 1000}}>
-                    <Popup url={popup} onClose={() => this.setState({popup: false})}></Popup>
+                    <Popup
+                        baseURL={baseURL}
+                        url={popup}
+                        onClose={() => this.setState({popup: false})}>
+                    </Popup>
                     </View>
                 }
                 {options && <View style={{flex: 1000}}>

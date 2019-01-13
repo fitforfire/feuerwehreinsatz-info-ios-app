@@ -52,6 +52,7 @@ type Props = {};
 export default class FweiView extends Component<Props> {
     constructor(props) {
         super(props);
+        this.state = {migrated: false};
     }
     handleWebViewMessage(message) {
         switch (message.method) {
@@ -59,15 +60,21 @@ export default class FweiView extends Component<Props> {
                 this.props.onOpenOptions();
                 break;
             case 'init':
-                console.log('init');
+                const {legacyData} = this.props;
+                if (legacyData && !this.state.migrated) {
+                    setTimeout(() => {
+                        this.convertLoginCode(legacyData.logintoken, 'ios', legacyData.userConfig);
+                        //alert("migrated");
+                        this.setState({migrated: true});
+                    }, 1000);
+                }
+            // no break;
+            case 'persistentLoginCallback':
                 CookieManager.getAll()
                     .then((res) => {
                         AsyncStorage.setItem('FWEI.persistentSession', res.persistentSession.value);
                         console.log('persistentSession saved.', res);
                     });
-                break;
-            case 'persistentLoginCallback':
-                console.log('persistentLoginCallback', message.data);
                 break;
             default:
                 console.log("unknown message", message.data);
@@ -84,17 +91,9 @@ export default class FweiView extends Component<Props> {
     }
     convertLoginCode(token, sessionName, config) {
         this.refs.webview.postMessage(JSON.stringify({method: "logintoken", data: {token, sessionName}}));
-        this.refs.webview.postMessage(JSON.stringify({method: "config", data: {config}}));
-    }
-    componentDidMount() {
-     window.setTimeout(() => {
-            const {legacyData} = this.props;
-            if (legacyData) {
-                this.convertLoginCode(legacyData.logintoken, 'c3', legacyData.userConfig);
-                alert("Login Code Converted");
-            }
+        setTimeout(() => {
+            this.refs.webview.postMessage(JSON.stringify({method: "config", data: {config}}));
         }, 5000);
-
     }
     render() {
         const {baseURL} = this.props;
