@@ -46,8 +46,6 @@ const jsCode = `
         })();
     `;
 
-
-
 type Props = {};
 export default class FweiView extends Component<Props> {
     constructor(props) {
@@ -61,12 +59,11 @@ export default class FweiView extends Component<Props> {
                 break;
             case 'init':
                 const {legacyData} = this.props;
-                if (legacyData && !this.state.migrated) {
+                if (legacyData && legacyData.logintoken && !this.state.migrated) {
+                    this.setState({migrated: true});
                     setTimeout(() => {
                         this.convertLoginCode(legacyData.logintoken, 'ios', legacyData.userConfig);
-                        //alert("migrated");
-                        this.setState({migrated: true});
-                    }, 1000);
+                    }, 3000);
                 }
             // no break;
             case 'persistentLoginCallback':
@@ -93,7 +90,7 @@ export default class FweiView extends Component<Props> {
         this.refs.webview.postMessage(JSON.stringify({method: "logintoken", data: {token, sessionName}}));
         setTimeout(() => {
             this.refs.webview.postMessage(JSON.stringify({method: "config", data: {config}}));
-        }, 5000);
+        }, 3000);
     }
     render() {
         const {baseURL} = this.props;

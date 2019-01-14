@@ -4,7 +4,8 @@ import FweiView from './FweiView';
 import Options from './Options';
 import Popup from './Popup';
 import CookieManager from 'react-native-cookies';
-const WebkitLocalStorageReader = require('NativeModules').WebkitLocalStorageReader;
+import config from './config';
+const {WebkitLocalStorageReader} = require('NativeModules');
 /*
 const WebkitLocalStorageReader = {
     get: () => {
@@ -18,9 +19,6 @@ const WebkitLocalStorageReader = {
     }
 };
 */
-const isMigrated = "true";
-
-import config from './config';
 
 function setPersistentSession(domain) {
     if (!domain) return Promise.resolve();
@@ -40,8 +38,32 @@ function setPersistentSession(domain) {
         } else {
             console.log("no persistensSession");
         }
-
     }).catch(() => {});
+}
+
+async function getMigrationData() {
+    const isMigratedKey = 'FWEI.isMigrated';
+    const isMigratedValue = "true";
+    try {
+        const migrated = await AsyncStorage.getItem(isMigratedKey);
+        if (migrated === isMigratedValue) {
+            return {};
+        }
+        await AsyncStorage.setItem(isMigratedKey, isMigratedValue);
+        const data = await WebkitLocalStorageReader.get();
+        if (data && data.server) {
+            return {
+                baseURL: data.server,
+                legacyData: {
+                    logintoken: data.code,
+                    userConfig: data.userConfig
+                }
+            };
+        }
+    } catch (e) {
+        alert("migration failed: " + e.message);
+        return {};
+    }
 }
 
 type Props = {};
@@ -49,46 +71,28 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {popup: false, options: false, baseURL: 'about:blank'};
-
     }
-    componentDidMount() {
-        AsyncStorage.getItem('FWEI.migrated').then((migrated) => {
-            migrated === isMigrated || WebkitLocalStorageReader.get().then(data => {
-                if (data && data.server) {
-                    AsyncStorage.setItem('FWEI.baseURL', data.server);
-                    AsyncStorage.setItem('FWEI.migrated', isMigrated);
-                    this.setState({
-                        baseURL: data.server,
-                        legacyData: {
-                            logintoken: data.code,
-                            userConfig: data.userConfig
-                        }
-                    });
-                }
-            });
-        }).catch((e) => {
-            alert("migration failed: " + e.message);
-        }).then(() => {
-            AsyncStorage.getItem('FWEI.baseURL').then((loadedBaseURL) => {
-                const baseURL = loadedBaseURL || config.defaultBaseURL;
-                setPersistentSession(baseURL).then(() => {
-                    this.setState({
-                        baseURL
-                    });
-                });
 
-            }).catch(() => {
-                setPersistentSession(config.defaultBaseURL).then(() => {
-                    this.setState({
-                        baseURL: config.defaultBaseURL
-                    });
-                });
-            });
-        });
+    async componentDidMount() {
+        try {
+            const migrationData = await getMigrationData();
+            if (migrationData && migrationData.baseURL) {
+                await AsyncStorage.setItem('FWEI.baseURL', migrationData.baseURL);
+                this.setState(migrationData);
+            } else {
+                const baseURL = (await AsyncStorage.getItem('FWEI.baseURL')) || config.defaultBaseURL;
+                await setPersistentSession(baseURL);
+                this.setState({baseURL});
+            }
+        } catch (e) {
+            const baseURL = config.defaultBaseURL;
+            await setPersistentSession(baseURL);
+            this.setState({baseURL});
+        }
     }
+
     render() {
-        const {options, popup, legacyData} = this.state;
-        const baseURL = this.state.baseURL || 'about:blank';
+        const {options, popup, legacyData, baseURL} = this.state;
         return (
             <View style={{flex: 1, marginTop: 20}}>
                 {baseURL && <View style={{flex: 1}}>
