@@ -3,6 +3,7 @@ import {View, Text, WebView, Button, AsyncStorage, TextInput} from 'react-native
 import FweiView from './FweiView';
 import Options from './Options';
 import Popup from './Popup';
+import Welcome from './Welcome';
 import CookieManager from 'react-native-cookies';
 import config from './config';
 const {WebkitLocalStorageReader} = require('NativeModules');
@@ -70,7 +71,7 @@ type Props = {};
 export default class App extends Component<Props> {
     constructor(props) {
         super(props);
-        this.state = {popup: false, options: false, baseURL: 'about:blank'};
+        this.state = {popup: false, options: false, baseURL: undefined, init: false};
     }
 
     async componentDidMount() {
@@ -80,19 +81,23 @@ export default class App extends Component<Props> {
                 await AsyncStorage.setItem('FWEI.baseURL', migrationData.baseURL);
                 this.setState(migrationData);
             } else {
-                const baseURL = (await AsyncStorage.getItem('FWEI.baseURL')) || config.defaultBaseURL;
-                await setPersistentSession(baseURL);
-                this.setState({baseURL});
+                const baseURL = await AsyncStorage.getItem('FWEI.baseURL');
+                if (baseURL) {
+                    await setPersistentSession(baseURL);
+                    this.setState({baseURL});
+                }
             }
         } catch (e) {
             const baseURL = config.defaultBaseURL;
             await setPersistentSession(baseURL);
             this.setState({baseURL});
+        } finally {
+            this.setState({init: true});
         }
     }
 
     render() {
-        const {options, popup, legacyData, baseURL} = this.state;
+        const {init, options, popup, legacyData, baseURL} = this.state;
         return (
             <View style={{flex: 1, marginTop: 20}}>
                 {baseURL && <View style={{flex: 1}}>
@@ -116,6 +121,13 @@ export default class App extends Component<Props> {
                         onClose={() => this.setState({options: false})}
                         onSave={(baseURL) => this.setState({options: false, baseURL})}>
                     </Options>
+                </View>
+                }
+                {init && !baseURL && <View style={{flex: 1000}}>
+                    <Welcome
+                        baseURL={config.defaultBaseURL}
+                        onSave={(baseURL) => this.setState({baseURL})}>
+                    </Welcome>
                 </View>
                 }
             </View>
