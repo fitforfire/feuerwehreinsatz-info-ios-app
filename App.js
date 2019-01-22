@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, WebView, Button, AsyncStorage, TextInput} from 'react-native';
+import {View, Text, WebView, Button, AsyncStorage, TextInput, SafeAreaView, StyleSheet, StatusBar} from 'react-native';
 import FweiView from './FweiView';
 import Options from './Options';
 import Popup from './Popup';
@@ -99,38 +99,51 @@ export default class App extends Component<Props> {
     render() {
         const {init, options, popup, legacyData, baseURL} = this.state;
         return (
-            <View style={{flex: 1, marginTop: 20}}>
-                {baseURL && <View style={{flex: 1}}>
-                    <FweiView baseURL={baseURL}
-                              legacyData={legacyData}
-                              onOpenOptions={() => this.setState({options: true})}
-                              onOpenPopup={(url) => this.setState({popup: url})}>
-                    </FweiView>
-                </View>}
-                {popup && <View style={{flex: 1000}}>
-                    <Popup
-                        baseURL={baseURL}
-                        url={popup}
-                        onClose={() => this.setState({popup: false})}>
-                    </Popup>
+            <SafeAreaView style={styles.safeArea}>
+                <StatusBar
+                    backgroundColor="#222"
+                    barStyle="light-content"
+                />
+                <View style={{flex: 1}}>
+                    {baseURL && <View style={{flex: 1}}>
+                        <FweiView baseURL={baseURL}
+                                  legacyData={legacyData}
+                                  onOpenOptions={() => this.setState({options: true})}
+                                  onOpenPopup={(url) => this.setState({popup: url})}>
+                        </FweiView>
+                    </View>}
+                    {popup && <View style={{flex: 1000}}>
+                        <Popup
+                            baseURL={baseURL}
+                            url={popup}
+                            onClose={() => this.setState({popup: false})}>
+                        </Popup>
+                        </View>
+                    }
+                    {options && <View style={{flex: 1000}}>
+                        <Options
+                            baseURL={baseURL}
+                            onClose={() => this.setState({options: false})}
+                            onSave={(baseURL) => this.setState({options: false, baseURL})}>
+                        </Options>
                     </View>
-                }
-                {options && <View style={{flex: 1000}}>
-                    <Options
-                        baseURL={baseURL}
-                        onClose={() => this.setState({options: false})}
-                        onSave={(baseURL) => this.setState({options: false, baseURL})}>
-                    </Options>
+                    }
+                    {init && !baseURL && <View style={{flex: 1000}}>
+                        <Welcome
+                            baseURL={config.defaultBaseURL}
+                            onSave={(baseURL) => this.setState({baseURL})}>
+                        </Welcome>
+                    </View>
+                    }
                 </View>
-                }
-                {init && !baseURL && <View style={{flex: 1000}}>
-                    <Welcome
-                        baseURL={config.defaultBaseURL}
-                        onSave={(baseURL) => this.setState({baseURL})}>
-                    </Welcome>
-                </View>
-                }
-            </View>
+            </SafeAreaView>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#222'
+    }
+});
