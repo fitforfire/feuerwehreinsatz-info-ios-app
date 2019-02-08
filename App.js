@@ -104,7 +104,7 @@ export default class App extends Component<Props> {
                     backgroundColor="#222"
                     barStyle="light-content"
                 />
-                <View style={{flex: 1}}>
+                <View style={styles.appArea}>
                     {baseURL && <View style={{flex: 1}}>
                         <FweiView baseURL={baseURL}
                                   legacyData={legacyData}
@@ -145,5 +145,9 @@ const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
         backgroundColor: '#222'
+    },
+    appArea: {
+        flex: 1,
+        backgroundColor: '#FFF'
     }
 });
