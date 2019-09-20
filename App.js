@@ -6,6 +6,8 @@ import Popup from './Popup';
 import Welcome from './Welcome';
 import CookieManager from 'react-native-cookies';
 import config from './config';
+import KeepAwake from 'react-native-keep-awake';
+
 const {WebkitLocalStorageReader} = require('NativeModules');
 /*
 const WebkitLocalStorageReader = {
@@ -100,6 +102,7 @@ export default class App extends Component<Props> {
         const {init, options, popup, legacyData, baseURL} = this.state;
         return (
             <SafeAreaView style={styles.safeArea}>
+                <KeepAwake />
                 <StatusBar
                     backgroundColor="#222"
                     barStyle="light-content"

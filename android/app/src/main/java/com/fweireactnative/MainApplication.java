@@ -3,6 +3,7 @@ package com.fweireactnative;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.corbt.keepawake.KCKeepAwakePackage;
 import com.smixx.fabric.FabricPackage;
 import com.rnfs.RNFSPackage;
 import com.psykar.cookiemanager.CookieManagerPackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new KCKeepAwakePackage(),
             new FabricPackage(),
             new RNFSPackage(),
             new CookieManagerPackage()
