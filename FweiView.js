@@ -80,7 +80,7 @@ export default class FweiView extends Component<Props> {
     onShouldStartLoadWithRequest(navState) {
         const {baseURL} = this.props;
         console.log(navState.url, baseURL);
-        if (navState.url.indexOf(baseURL.toLowerCase()) === -1 && navState.url.indexOf("about:blank") === -1) {
+        if (navState.url.indexOf("//" + baseURL.toLowerCase()) === -1 && navState.url.indexOf("about:blank") === -1) {
             this.props.onOpenPopup(navState.url);
             return false;
         }
