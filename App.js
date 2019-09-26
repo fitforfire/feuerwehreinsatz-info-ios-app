@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, WebView, Button, AsyncStorage, TextInput, SafeAreaView, StyleSheet, StatusBar} from 'react-native';
+import {View, Text, WebView, Button, TextInput, SafeAreaView, StyleSheet, StatusBar} from 'react-native';
 import FweiView from './FweiView';
 import Options from './Options';
 import Popup from './Popup';
@@ -7,6 +7,7 @@ import Welcome from './Welcome';
 import CookieManager from 'react-native-cookies';
 import config from './config';
 import KeepAwake from 'react-native-keep-awake';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const {WebkitLocalStorageReader} = require('NativeModules');
 /*

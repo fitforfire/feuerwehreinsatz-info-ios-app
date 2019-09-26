@@ -1,24 +1,16 @@
 import CookieManager from 'react-native-cookies';
 import React, { Component } from 'react';
-import {View, Text, WebView, Button, AsyncStorage, TextInput} from 'react-native';
+import {View, Text, Button, TextInput} from 'react-native';
 import {defaultBaseURL} from './config';
+import { WebView } from 'react-native-webview';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const jsCode = `
         (function() {
-          var originalPostMessage = window.postMessage;
-        
-          var patchedPostMessage = function(message, targetOrigin, transfer) { 
-            originalPostMessage(message, targetOrigin, transfer);
-          };
-        
-          patchedPostMessage.toString = function() { 
-            return String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage'); 
-          };
-          window.postMessage = patchedPostMessage;
           window.nativeAppRemote = {};
-          window.nativeAppRemote.init = function() { window.postMessage(JSON.stringify({method: 'init', data: {}}), '*'); };
-          window.nativeAppRemote.openConfig = function() { window.postMessage(JSON.stringify({method: 'openConfig', data: {}}), '*'); };
-          window.nativeAppRemote.persistentLoginCallback = function(status) { window.postMessage(JSON.stringify({method: 'persistentLoginCallback', data: {status}}), '*'); };
+          window.nativeAppRemote.init = function() { window.ReactNativeWebView.postMessage(JSON.stringify({method: 'init', data: {}}), '*'); };
+          window.nativeAppRemote.openConfig = function() { window.ReactNativeWebView.postMessage(JSON.stringify({method: 'openConfig', data: {}}), '*'); };
+          window.nativeAppRemote.persistentLoginCallback = function(status) { window.ReactNativeWebView.postMessage(JSON.stringify({method: 'persistentLoginCallback', data: {status}}), '*'); };
           
           if ($('#navAppConfig').length === 0) {
             alert('FWEI unter dieser URL nicht gefunden');
@@ -101,6 +93,7 @@ export default class FweiView extends Component<Props> {
                 style={{flex: 1}}
                 ref="webview"
                 injectedJavaScript={jsCode}
+                bounce={false}
                 onMessage={(event)=> this.handleWebViewMessage(JSON.parse(event.nativeEvent.data))}
             />
         </View>);
