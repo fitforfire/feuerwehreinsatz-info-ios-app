@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {View, Text, WebView, Button, AsyncStorage, TextInput, Picker, Switch, StyleSheet} from 'react-native';
+import {View, Text, Button, TextInput, Picker, Switch, StyleSheet} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import config from './config';
 const {defaultServer} = config;

@@ -137,6 +137,9 @@ android {
 }
 
 dependencies {
+    implementation project(':@react-native-community_geolocation')
+    implementation project(':@react-native-community_async-storage')
+    implementation project(':react-native-webview')
     compile project(':react-native-keep-awake')
     compile project(':react-native-fabric')
     compile project(':react-native-fs')

@@ -3,6 +3,9 @@ package com.fweireactnative;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.geolocation.GeolocationPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.corbt.keepawake.KCKeepAwakePackage;
 import com.smixx.fabric.FabricPackage;
 import com.rnfs.RNFSPackage;
@@ -27,6 +30,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new GeolocationPackage(),
+            new AsyncStoragePackage(),
+            new RNCWebViewPackage(),
             new KCKeepAwakePackage(),
             new FabricPackage(),
             new RNFSPackage(),

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import {View, Text, WebView, Button, AsyncStorage, TextInput} from 'react-native';
+import {View, Text, Button, AsyncStorage, TextInput} from 'react-native';
+import { WebView } from 'react-native-webview';
 
 type Props = {};
 export default class Options extends Component<Props> {
