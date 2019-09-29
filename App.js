@@ -8,6 +8,7 @@ import CookieManager from 'react-native-cookies';
 import config from './config';
 import KeepAwake from 'react-native-keep-awake';
 import AsyncStorage from '@react-native-community/async-storage';
+import Fabric from 'react-native-fabric';
 
 const {WebkitLocalStorageReader} = require('NativeModules');
 /*
@@ -42,7 +43,10 @@ function setPersistentSession(domain) {
         } else {
             console.log("no persistensSession");
         }
-    }).catch(() => {});
+    }).catch(e => {
+        Fabric.Crashlytics.logException(e);
+        console.error(e);
+    });
 }
 
 async function getMigrationData() {
@@ -65,6 +69,7 @@ async function getMigrationData() {
             };
         }
     } catch (e) {
+        Fabric.Crashlytics.logException(e);
         alert("migration failed: " + e.message);
         return {};
     }
@@ -91,6 +96,7 @@ export default class App extends Component<Props> {
                 }
             }
         } catch (e) {
+            Fabric.Crashlytics.logException(e);
             const baseURL = config.defaultBaseURL;
             await setPersistentSession(baseURL);
             this.setState({baseURL});

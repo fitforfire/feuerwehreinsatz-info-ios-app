@@ -4,6 +4,7 @@ import {View, Text, Button, TextInput} from 'react-native';
 import {defaultBaseURL} from './config';
 import { WebView } from 'react-native-webview';
 import AsyncStorage from '@react-native-community/async-storage';
+import Fabric from 'react-native-fabric';
 
 const jsCode = `
         (function() {
@@ -63,6 +64,10 @@ export default class FweiView extends Component<Props> {
                     .then((res) => {
                         AsyncStorage.setItem('FWEI.persistentSession', res.persistentSession.value);
                         console.log('persistentSession saved.', res);
+                    })
+                    .catch(e => {
+                        Fabric.Crashlytics.logException(e);
+                        console.error(e);
                     });
                 break;
             default:
