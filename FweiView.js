@@ -1,10 +1,10 @@
-import CookieManager from 'react-native-cookies';
+import CookieManager from '@react-native-cookies/cookies';
 import React, { Component } from 'react';
 import {View, Text, Button, TextInput} from 'react-native';
 import {defaultBaseURL} from './config';
 import { WebView } from 'react-native-webview';
 import AsyncStorage from '@react-native-community/async-storage';
-import Fabric from 'react-native-fabric';
+import crashlytics from '@react-native-firebase/crashlytics';
 
 const jsCode = `
         (function() {
@@ -66,7 +66,7 @@ export default class FweiView extends Component<Props> {
                         console.log('persistentSession saved.', res);
                     })
                     .catch(e => {
-                        Fabric.Crashlytics.logException(e);
+                        crashlytics.log(e);
                         console.error(e);
                     });
                 break;
