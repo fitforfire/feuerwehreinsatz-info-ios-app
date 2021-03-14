@@ -1,29 +1,14 @@
 import React, { Component } from 'react';
-import {View, Text, WebView, Button, TextInput, SafeAreaView, StyleSheet, StatusBar} from 'react-native';
+import {View, Text, WebView, Button, TextInput, SafeAreaView, StyleSheet, StatusBar, NativeModules} from 'react-native';
 import FweiView from './FweiView';
 import Options from './Options';
 import Popup from './Popup';
 import Welcome from './Welcome';
-import CookieManager from 'react-native-cookies';
+import CookieManager from '@react-native-cookies/cookies';
 import config from './config';
 import KeepAwake from 'react-native-keep-awake';
 import AsyncStorage from '@react-native-community/async-storage';
-import Fabric from 'react-native-fabric';
-
-const {WebkitLocalStorageReader} = require('NativeModules');
-/*
-const WebkitLocalStorageReader = {
-    get: () => {
-        return new Promise((resolve) => {
-            return resolve({
-                server: 'fwei.mobi',
-                userConfig: '{map:{tl:osm}}',
-                code: 'user'
-            });
-        });
-    }
-};
-*/
+import crashlytics from '@react-native-firebase/crashlytics';
 
 function setPersistentSession(domain) {
     if (!domain) return Promise.resolve();
@@ -44,35 +29,9 @@ function setPersistentSession(domain) {
             console.log("no persistensSession");
         }
     }).catch(e => {
-        Fabric.Crashlytics.logException(e);
+        crashlytics.log(e);
         console.error(e);
     });
-}
-
-async function getMigrationData() {
-    const isMigratedKey = 'FWEI.isMigrated';
-    const isMigratedValue = "true";
-    try {
-        const migrated = await AsyncStorage.getItem(isMigratedKey);
-        if (migrated === isMigratedValue) {
-            return {};
-        }
-        await AsyncStorage.setItem(isMigratedKey, isMigratedValue);
-        const data = await WebkitLocalStorageReader.get();
-        if (data && data.server) {
-            return {
-                baseURL: data.server,
-                legacyData: {
-                    logintoken: data.code,
-                    userConfig: data.userConfig
-                }
-            };
-        }
-    } catch (e) {
-        Fabric.Crashlytics.logException(e);
-        alert("migration failed: " + e.message);
-        return {};
-    }
 }
 
 type Props = {};
@@ -84,19 +43,13 @@ export default class App extends Component<Props> {
 
     async componentDidMount() {
         try {
-            const migrationData = await getMigrationData();
-            if (migrationData && migrationData.baseURL) {
-                await AsyncStorage.setItem('FWEI.baseURL', migrationData.baseURL);
-                this.setState(migrationData);
-            } else {
-                const baseURL = await AsyncStorage.getItem('FWEI.baseURL');
-                if (baseURL) {
-                    await setPersistentSession(baseURL);
-                    this.setState({baseURL});
-                }
+            const baseURL = await AsyncStorage.getItem('FWEI.baseURL');
+            if (baseURL) {
+                await setPersistentSession(baseURL);
+                this.setState({baseURL});
             }
         } catch (e) {
-            Fabric.Crashlytics.logException(e);
+            crashlytics.log(e);
             const baseURL = config.defaultBaseURL;
             await setPersistentSession(baseURL);
             this.setState({baseURL});
