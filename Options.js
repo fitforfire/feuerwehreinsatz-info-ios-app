@@ -55,6 +55,7 @@ export default class Options extends Component<Props> {
 
             <Button flex title="Speichern" onPress={() => this.save({baseURL: unsavedServer})} />
             <Button flex title={"Zurück zu " + baseURL} onPress={() => onClose()} />
+            <Text>Version: 2.1.0</Text>
         </View>);
     }
 }

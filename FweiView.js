@@ -22,9 +22,6 @@ const jsCode = `
             try {
                 const message = JSON.parse(event.data);
                 switch (message.method) {
-                    case 'logintoken':
-                        window.nativeAppApi.doPersistentLogin(message.data.token, message.data.sessionName);
-                    break;
                     case 'config':
                         window.nativeAppApi.setUserConfig(message.data.config);
                     break;
@@ -43,7 +40,7 @@ type Props = {};
 export default class FweiView extends Component<Props> {
     constructor(props) {
         super(props);
-        this.state = {migrated: false};
+        this.state = {};
     }
     handleWebViewMessage(message) {
         switch (message.method) {
@@ -51,22 +48,19 @@ export default class FweiView extends Component<Props> {
                 this.props.onOpenOptions();
                 break;
             case 'init':
-                const {legacyData} = this.props;
-                if (legacyData && legacyData.logintoken && !this.state.migrated) {
-                    this.setState({migrated: true});
-                    setTimeout(() => {
-                        this.convertLoginCode(legacyData.logintoken, 'ios', legacyData.userConfig);
-                    }, 3000);
-                }
-            // no break;
-            case 'persistentLoginCallback':
-                CookieManager.getAll()
+                CookieManager.getAll(true)
                     .then((res) => {
-                        AsyncStorage.setItem('FWEI.persistentSession', res.persistentSession.value);
-                        console.log('persistentSession saved.', res);
+                        if (res.persistentSession && res.persistentSession.value) {
+                            AsyncStorage.setItem('FWEI.persistentSession', res.persistentSession.value);
+                            crashlytics().log('persistentSession saved.', res);
+                            console.log('persistentSession saved.', res);
+                        } else {
+                            crashlytics().log('persistentSession not found.', res);
+                            console.log('persistentSession not found.', res);
+                        }
                     })
                     .catch(e => {
-                        crashlytics.log(e);
+                        crashlytics().recordError(e);
                         console.error(e);
                     });
                 break;
@@ -82,12 +76,6 @@ export default class FweiView extends Component<Props> {
             return false;
         }
         return true;
-    }
-    convertLoginCode(token, sessionName, config) {
-        this.refs.webview.postMessage(JSON.stringify({method: "logintoken", data: {token, sessionName}}));
-        setTimeout(() => {
-            this.refs.webview.postMessage(JSON.stringify({method: "config", data: {config}}));
-        }, 3000);
     }
     render() {
         const {baseURL} = this.props;

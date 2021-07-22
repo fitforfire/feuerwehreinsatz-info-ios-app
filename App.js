@@ -14,7 +14,7 @@ function setPersistentSession(domain) {
     if (!domain) return Promise.resolve();
     return AsyncStorage.getItem('FWEI.persistentSession').then((persistentSession) => {
         if (persistentSession) {
-            return CookieManager.set({
+            return CookieManager.set("https://" + domain, {
                 name: 'persistentSession',
                 value: persistentSession,
                 domain: domain,
@@ -22,14 +22,16 @@ function setPersistentSession(domain) {
                 path: '/',
                 version: '1',
                 expiration: '2030-01-01T12:30:00.00-05:00'
-            }).then((res) => {
-                console.log('CookieManager.set =>', persistentSession);
+            }, true).then((res) => {
+                crashlytics().log('CookieManager.set =>', domain, persistentSession);
+                console.log('CookieManager.set =>', domain, persistentSession);
             });
         } else {
+            crashlytics().log("no persistensSession");
             console.log("no persistensSession");
         }
     }).catch(e => {
-        crashlytics.log(e);
+        crashlytics().recordError(e);
         console.error(e);
     });
 }
@@ -39,6 +41,7 @@ export default class App extends Component<Props> {
     constructor(props) {
         super(props);
         this.state = {popup: false, options: false, baseURL: undefined, init: false};
+        crashlytics().log('App started');
     }
 
     async componentDidMount() {
@@ -49,7 +52,7 @@ export default class App extends Component<Props> {
                 this.setState({baseURL});
             }
         } catch (e) {
-            crashlytics.log(e);
+            crashlytics().recordError(e);
             const baseURL = config.defaultBaseURL;
             await setPersistentSession(baseURL);
             this.setState({baseURL});
