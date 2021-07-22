@@ -14,6 +14,7 @@
 		4601CAF90D61F16A13070B01 /* libPods-feuerwehreinsatzInfoApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A42C028BCA8766AA6D845C5B /* libPods-feuerwehreinsatzInfoApp.a */; };
 		48534EB05892A2B56AB6BF5C /* libPods-feuerwehreinsatzInfoApp-feuerwehreinsatzInfoAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9BB615BD313AE66457EA0554 /* libPods-feuerwehreinsatzInfoApp-feuerwehreinsatzInfoAppTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		F808875426A2275100E8CD32 /* firebase.json in Resources */ = {isa = PBXBuildFile; fileRef = F808875326A2275100E8CD32 /* firebase.json */; };
 		F84F7CB225FE108C00DB8F02 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F84F7CB125FE108C00DB8F02 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		B4F8C16849697714D7C2145E /* Pods-feuerwehreinsatzInfoApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-feuerwehreinsatzInfoApp.debug.xcconfig"; path = "Target Support Files/Pods-feuerwehreinsatzInfoApp/Pods-feuerwehreinsatzInfoApp.debug.xcconfig"; sourceTree = "<group>"; };
 		E9C24EF41A96C54D66C4DA82 /* Pods-feuerwehreinsatzInfoApp-feuerwehreinsatzInfoAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-feuerwehreinsatzInfoApp-feuerwehreinsatzInfoAppTests.debug.xcconfig"; path = "Target Support Files/Pods-feuerwehreinsatzInfoApp-feuerwehreinsatzInfoAppTests/Pods-feuerwehreinsatzInfoApp-feuerwehreinsatzInfoAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F808875326A2275100E8CD32 /* firebase.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = firebase.json; sourceTree = "<group>"; };
 		F84F7CB125FE108C00DB8F02 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,6 +120,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				F808875326A2275100E8CD32 /* firebase.json */,
 				F84F7CB125FE108C00DB8F02 /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* feuerwehreinsatzInfoApp */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -249,6 +252,7 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				F808875426A2275100E8CD32 /* firebase.json in Resources */,
 				F84F7CB225FE108C00DB8F02 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -513,14 +517,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 100;
+				CURRENT_PROJECT_VERSION = 103;
+				DEVELOPMENT_TEAM = XPCN7BVWBG;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = feuerwehreinsatzInfoApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -541,13 +546,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 100;
+				CURRENT_PROJECT_VERSION = 103;
+				DEVELOPMENT_TEAM = XPCN7BVWBG;
 				INFOPLIST_FILE = feuerwehreinsatzInfoApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.2;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
