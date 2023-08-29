@@ -88,6 +88,11 @@ export default class FweiView extends Component<Props> {
                 injectedJavaScript={jsCode}
                 bounce={false}
                 onMessage={(event)=> this.handleWebViewMessage(JSON.parse(event.nativeEvent.data))}
+                onContentProcessDidTerminate={(syntheticEvent) => {
+                    const { nativeEvent } = syntheticEvent;
+                    console.warn('Content process terminated, reloading', nativeEvent);
+                    this.refs.webview.reload();
+                }}
             />
         </View>);
     }
