@@ -1,4 +1,4 @@
-package com.feuerwehreinsatzinfoapp.feuerwehreinsatzinfoapp;
+package com.feuerwehreinsatzinfoapp;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

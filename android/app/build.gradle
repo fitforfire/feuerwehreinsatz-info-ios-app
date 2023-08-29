@@ -1,4 +1,6 @@
 apply plugin: "com.android.application"
+apply plugin: "com.google.gms.google-services"
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: "com.facebook.react"
 
 /**
@@ -73,9 +75,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.feuerwehreinsatzinfoapp.feuerwehreinsatzinfoapp"
+    namespace "com.feuerwehreinsatzinfoapp"
     defaultConfig {
-        applicationId "com.feuerwehreinsatzinfoapp.feuerwehreinsatzinfoapp"
+        applicationId "com.feuerwehreinsatzinfoapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
