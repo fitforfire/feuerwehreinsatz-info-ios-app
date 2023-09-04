@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import {View, Text, Button, TextInput} from 'react-native';
 import {defaultBaseURL} from './config';
 import { WebView } from 'react-native-webview';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import crashlytics from '@react-native-firebase/crashlytics';
 
 const jsCode = `
@@ -12,12 +12,12 @@ const jsCode = `
           window.nativeAppRemote.init = function() { window.ReactNativeWebView.postMessage(JSON.stringify({method: 'init', data: {}}), '*'); };
           window.nativeAppRemote.openConfig = function() { window.ReactNativeWebView.postMessage(JSON.stringify({method: 'openConfig', data: {}}), '*'); };
           window.nativeAppRemote.persistentLoginCallback = function(status) { window.ReactNativeWebView.postMessage(JSON.stringify({method: 'persistentLoginCallback', data: {status}}), '*'); };
-          
+
           if ($('#navAppConfig').length === 0) {
             alert('FWEI unter dieser URL nicht gefunden');
             nativeAppRemote.openConfig();
           }
-          
+
           document.addEventListener('message', function(event) {
             try {
                 const message = JSON.parse(event.data);
@@ -32,7 +32,7 @@ const jsCode = `
             } catch (e) {
                 alert(JSON.stringify(e));
             }
-           });  
+           });
         })();
     `;
 
@@ -88,6 +88,11 @@ export default class FweiView extends Component<Props> {
                 injectedJavaScript={jsCode}
                 bounce={false}
                 onMessage={(event)=> this.handleWebViewMessage(JSON.parse(event.nativeEvent.data))}
+                onContentProcessDidTerminate={(syntheticEvent) => {
+                    const { nativeEvent } = syntheticEvent;
+                    console.warn('Content process terminated, reloading', nativeEvent);
+                    this.refs.webview.reload();
+                }}
             />
         </View>);
     }

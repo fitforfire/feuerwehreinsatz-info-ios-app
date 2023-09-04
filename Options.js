@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {View, Text, Button, TextInput, Switch, StyleSheet} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getVersion} from 'react-native-device-info';
 
 import config from './config';
 const {defaultServer} = config;
@@ -55,7 +56,7 @@ export default class Options extends Component<Props> {
 
             <Button flex title="Speichern" onPress={() => this.save({baseURL: unsavedServer})} />
             <Button flex title={"Zurück zu " + baseURL} onPress={() => onClose()} />
-            <Text>Version: 2.1.0</Text>
+            <Text>Version: {getVersion()}</Text>
         </View>);
     }
 }
