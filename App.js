@@ -6,7 +6,7 @@ import Popup from './Popup';
 import Welcome from './Welcome';
 import CookieManager from '@react-native-cookies/cookies';
 import config from './config';
-import KeepAwake from 'react-native-keep-awake';
+import KeepAwake from '@sayem314/react-native-keep-awake';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import crashlytics from '@react-native-firebase/crashlytics';
 

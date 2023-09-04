@@ -370,9 +370,9 @@ PODS:
     - glog
   - react-native-cookies (6.2.1):
     - React-Core
-  - react-native-keep-awake (4.0.0):
-    - React
-  - react-native-webview (13.4.0):
+  - react-native-keep-awake (1.2.2):
+    - React-Core
+  - react-native-webview (13.5.1):
     - React-Core
   - React-NativeModulesApple (0.72.4):
     - hermes-engine
@@ -488,10 +488,12 @@ PODS:
     - React-Core
   - RNCPicker (2.5.0):
     - React-Core
-  - RNFBApp (18.3.1):
+  - RNDeviceInfo (10.9.0):
+    - React-Core
+  - RNFBApp (18.3.2):
     - Firebase/CoreOnly (= 10.14.0)
     - React-Core
-  - RNFBCrashlytics (18.3.1):
+  - RNFBCrashlytics (18.3.2):
     - Firebase/Crashlytics (= 10.14.0)
     - FirebaseCoreExtension (= 10.14.0)
     - React-Core
@@ -524,7 +526,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - "react-native-cookies (from `../node_modules/@react-native-cookies/cookies`)"
-  - react-native-keep-awake (from `../node_modules/react-native-keep-awake`)
+  - "react-native-keep-awake (from `../node_modules/@sayem314/react-native-keep-awake`)"
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -545,6 +547,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBCrashlytics (from `../node_modules/@react-native-firebase/crashlytics`)"
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -614,7 +617,7 @@ EXTERNAL SOURCES:
   react-native-cookies:
     :path: "../node_modules/@react-native-cookies/cookies"
   react-native-keep-awake:
-    :path: "../node_modules/react-native-keep-awake"
+    :path: "../node_modules/@sayem314/react-native-keep-awake"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-NativeModulesApple:
@@ -655,6 +658,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCPicker:
     :path: "../node_modules/@react-native-picker/picker"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
   RNFBApp:
     :path: "../node_modules/@react-native-firebase/app"
   RNFBCrashlytics:
@@ -699,8 +704,8 @@ SPEC CHECKSUMS:
   React-jsinspector: aaed4cf551c4a1c98092436518c2d267b13a673f
   React-logger: da1ebe05ae06eb6db4b162202faeafac4b435e77
   react-native-cookies: f54fcded06bb0cda05c11d86788020b43528a26c
-  react-native-keep-awake: afad8a51dfef9fe9655a6344771be32c8596d774
-  react-native-webview: 64c9bf9646e7377240fb87d70f74556af6433143
+  react-native-keep-awake: ad1d67f617756b139536977a0bf06b27cec0714a
+  react-native-webview: 8baa0f5c6d336d6ba488e942bcadea5bf51f050a
   React-NativeModulesApple: 1152e5e8df427a5e42bb161a4bf66326f9987d9f
   React-perflogger: 496a1a3dc6737f964107cb3ddae7f9e265ddda58
   React-RCTActionSheet: 02904b932b50e680f4e26e7a686b33ebf7ef3c00
@@ -720,8 +725,9 @@ SPEC CHECKSUMS:
   ReactCommon: 8a3e98e0fdeb1ee2cf25f62095e3d33867999f06
   RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
   RNCPicker: 32ca102146bc7d34a8b93a998d9938d9f9ec7898
-  RNFBApp: f454b78f819ab2be54d941ceaab4c696506c3c8e
-  RNFBCrashlytics: 0b15383cdaa2c8360379d67f91c1c3be1381aecd
+  RNDeviceInfo: 02ea8b23e2280fa18e00a06d7e62804d74028579
+  RNFBApp: 0b534885354024f4d171ede8da04521d81bc1767
+  RNFBCrashlytics: 2db3e602e90731ff010e2d5eefb92cd85a8a7c31
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 3efc43e0d48686ce2e8c60f99d4e6bd349aff981
 
